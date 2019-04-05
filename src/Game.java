@@ -7,7 +7,8 @@ public class Game extends Canvas implements Runnable
 {
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     //window size
-    public static final int WIDTH = 1280, HEIGHT = 960;
+    public static final int WIDTH = 1280, HEIGHT = 720;
+
     //entire game runs through the thread
     private Thread thread;
     private boolean running = false;
@@ -18,11 +19,24 @@ public class Game extends Canvas implements Runnable
     private Random r;
     private Handler handler;
     private HUD hud;
+    private Menu menu;
+
+    public enum STATE
+    {
+        Menu,
+        Help,
+        Game
+    }
+
+    public STATE gameState = STATE.Menu;
 
     public Game()
     {
         handler = new Handler();
+        menu = new Menu(this, handler);
         this.addKeyListener(new KeyInput(handler));
+        this.addMouseListener(menu);
+
         /*System.out.println("Height: " + screenSize.getHeight());
         System.out.println("Width: " + screenSize.getWidth());
         System.out.println("size: " + screenSize.getSize());*/
@@ -32,11 +46,10 @@ public class Game extends Canvas implements Runnable
 
         r = new Random();
 
-        handler.addObject(new Player(WIDTH/2-32, HEIGHT/2-32, ID.Player));
-        handler.addObject(new Player(WIDTH/2+64, HEIGHT/2-32, ID.Player2));
-        for (int i = 0; i < 5; i++)
+        if (gameState == STATE.Game)
         {
-            handler.addObject(new BasicEnemy(r.nextInt(WIDTH), r.nextInt(HEIGHT), ID.BasicEnemy));
+            handler.addObject(new Player(WIDTH / 2 - 32, HEIGHT / 2 - 32, ID.Player));
+            handler.addObject(new Player(WIDTH / 2 + 64, HEIGHT / 2 - 32, ID.Player2));
         }
     }
 
@@ -111,7 +124,15 @@ public class Game extends Canvas implements Runnable
     private void tick()
     {
         handler.tick();
-        hud.tick();
+        if (gameState == STATE.Game)
+        {
+            hud.tick();
+        }
+        else if (gameState == STATE.Menu)
+        {
+            menu.tick();
+        }
+
     }
 
     //redrawing of the screen
@@ -132,7 +153,16 @@ public class Game extends Canvas implements Runnable
         g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
 
         handler.render(g);
-        hud.render(g);
+
+        if (gameState == STATE.Game)
+        {
+            hud.render(g);
+        }
+        else if (gameState == STATE.Menu || gameState == STATE.Help)
+        {
+            menu.render(g);
+        }
+
 
         g.dispose();
         bs.show();
