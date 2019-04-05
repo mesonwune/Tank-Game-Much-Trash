@@ -21,9 +21,12 @@ public class KeyInput extends KeyAdapter
             if (obj.getId() == ID.Player)
             {
                 //all key events for Player 1
-                if (key == KeyEvent.VK_W) { obj.setVelY(-3);}
+                //forward backwards
+                if (key == KeyEvent.VK_W) { obj.setVelY(-3); }
                 if (key == KeyEvent.VK_S) { obj.setVelY(3);}
-                if (key == KeyEvent.VK_A) { obj.setVelX(-3);}
+
+                //rotate left and right
+                if (key == KeyEvent.VK_A) { obj.setVelX(-3); }
                 if (key == KeyEvent.VK_D) { obj.setVelX(3);}
             }
             else if (obj.getId() == ID.Player2)

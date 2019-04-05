@@ -10,6 +10,8 @@ public abstract class GameObject
     private int angle;
 
     private BufferedImage img;
+    private final int R = 2;
+    private final int ROTATIONSPEED = 4;
 
     public GameObject(int x, int y, ID id)
     {
@@ -49,4 +51,8 @@ public abstract class GameObject
     public BufferedImage getImg() { return img; }
 
     public void setImg(BufferedImage img) { this.img = img; }
+
+    public int getROTATIONSPEED() { return ROTATIONSPEED; }
+
+    public int getR() { return R; }
 }

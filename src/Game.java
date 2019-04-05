@@ -1,15 +1,19 @@
 import java.awt.*;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
 import java.util.Random;
 
 public class Game extends Canvas implements Runnable
 {
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     //window size
-    public static final int WIDTH = 1280, HEIGHT = 800;
+    public static final int WIDTH = 1280, HEIGHT = 960;
     //entire game runs through the thread
     private Thread thread;
     private boolean running = false;
+
+    //buffers the whole window
+    private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 
     private Random r;
     private Handler handler;
@@ -113,18 +117,19 @@ public class Game extends Canvas implements Runnable
     //redrawing of the screen
     private void render()
     {
+
         BufferStrategy bs = this.getBufferStrategy();
 
         if (bs ==null)
         {
+            //we're going to have 3 buffers
             this.createBufferStrategy(3);
             return;
         }
 
         Graphics g = bs.getDrawGraphics();
-        g.setColor(Color.black);
-        g.fillRect(0, 0, WIDTH, HEIGHT);
 
+        g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
 
         handler.render(g);
         hud.render(g);
