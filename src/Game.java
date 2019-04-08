@@ -1,6 +1,9 @@
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
 
 public class Game extends Canvas implements Runnable
@@ -14,7 +17,7 @@ public class Game extends Canvas implements Runnable
     private boolean running = false;
 
     //buffers the whole window
-    private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+    private BufferedImage image = null;
 
     private Random r;
     private Handler handler;
@@ -41,6 +44,14 @@ public class Game extends Canvas implements Runnable
         System.out.println("Width: " + screenSize.getWidth());
         System.out.println("size: " + screenSize.getSize());*/
         new Window(WIDTH, HEIGHT, "Tanker", this);
+
+        try
+        {
+            image = ImageIO.read(new File("/resources/Background.png"));
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
 
         hud = new HUD();
 
@@ -149,13 +160,15 @@ public class Game extends Canvas implements Runnable
         }
 
         Graphics g = bs.getDrawGraphics();
-
-        g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+        g.setColor(Color.black);
+        g.fillRect(0, 0, WIDTH, HEIGHT);
+        //g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
 
         handler.render(g);
 
         if (gameState == STATE.Game)
         {
+            //g.drawImage(image, 0, 0, WIDTH, HEIGHT, this);
             hud.render(g);
         }
         else if (gameState == STATE.Menu || gameState == STATE.Help)

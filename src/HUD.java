@@ -14,6 +14,7 @@ public class HUD
 
     public void render(Graphics g)
     {
+
         //for player1
         g.setColor(Color.gray);
         g.fillRect(15, 15, 200, 15);
