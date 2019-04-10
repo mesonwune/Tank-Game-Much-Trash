@@ -6,12 +6,14 @@ public abstract class GameObject
 {
     protected int x,y; //
     protected ID id;
-    protected int velX, velY;
+    protected float velX, velY = 0;
     private int angle;
 
     private BufferedImage img;
     private final int R = 2;
     private final int ROTATIONSPEED = 4;
+
+    private boolean up, down, right, left = false;
 
     public GameObject(int x, int y, ID id)
     {
@@ -23,6 +25,7 @@ public abstract class GameObject
 
     public abstract void tick();
     public abstract void render(Graphics g);
+    public abstract Rectangle getBounds();
 
     public int getX() { return x; }
 
@@ -36,11 +39,11 @@ public abstract class GameObject
 
     public void setId(ID id) { this.id = id; }
 
-    public int getVelX() { return velX; }
+    public float getVelX() { return velX; }
 
     public void setVelX(int velX) { this.velX = velX; }
 
-    public int getVelY() { return velY; }
+    public float getVelY() { return velY; }
 
     public void setVelY(int velY) { this.velY = velY; }
 
@@ -55,4 +58,20 @@ public abstract class GameObject
     public int getROTATIONSPEED() { return ROTATIONSPEED; }
 
     public int getR() { return R; }
+
+    public boolean isUp() { return up; }
+
+    public void setUp(boolean up) { this.up = up; }
+
+    public boolean isDown() { return down; }
+
+    public void setDown(boolean down) { this.down = down; }
+
+    public boolean isRight() { return right; }
+
+    public void setRight(boolean right) { this.right = right; }
+
+    public boolean isLeft() { return left; }
+
+    public void setLeft(boolean left) { this.left = left; }
 }

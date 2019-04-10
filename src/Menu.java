@@ -54,6 +54,16 @@ public class Menu extends MouseAdapter
             }
         }
 
+        //back button for end
+        if (game.gameState == Game.STATE.End)
+        {
+            if (mouseOver(mx, my, 540, 450, 200, 64))
+            {
+                game.gameState = Game.STATE.Menu;
+                return;
+            }
+        }
+
     }
 
     public void mouseReleased(MouseEvent e)
@@ -120,6 +130,24 @@ public class Menu extends MouseAdapter
             g.setFont(font3);
             g.drawString("Player 1: Use WASD keys to move/rotate. Use SPACE to shoot.", 100, 200);
             g.drawString("Player 2: Use UP, DOWN, LEFT, AND RIGHT keys to move/rotate. Use ENTER to shoot.", 100, 300);
+
+            g.setFont(font2);
+            g.drawRect(540, 450, 200, 64);
+            g.drawString("Back", 600, 490);
+        }
+        else if (game.gameState == Game.STATE.End)
+        {
+            Font font = new Font("arial", 1, 50);
+            Font font2 = new Font("arial", 1, 30);
+            Font font3 = new Font("arial", 1, 20);
+
+            g.setFont(font);
+            g.setColor(Color.red);
+            g.drawString("Game Over", 500, 75);
+
+            g.setFont(font3);
+            g.drawString("You lost!", 100, 200);
+            //g.drawString("Player 2: Use UP, DOWN, LEFT, AND RIGHT keys to move/rotate. Use ENTER to shoot.", 100, 300);
 
             g.setFont(font2);
             g.drawRect(540, 450, 200, 64);

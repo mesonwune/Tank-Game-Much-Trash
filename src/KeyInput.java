@@ -5,6 +5,7 @@ public class KeyInput extends KeyAdapter
 {
 
     private Handler handler;
+    private Player t1, t2;
 
     public KeyInput(Handler handler)
     {
@@ -39,7 +40,6 @@ public class KeyInput extends KeyAdapter
             }
         }
 
-        //if(key == keyEvent.)
     }
 
 

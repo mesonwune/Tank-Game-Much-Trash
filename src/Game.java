@@ -28,7 +28,8 @@ public class Game extends Canvas implements Runnable
     {
         Menu,
         Help,
-        Game
+        Game,
+        End
     }
 
     public STATE gameState = STATE.Menu;
@@ -139,7 +140,7 @@ public class Game extends Canvas implements Runnable
         {
             hud.tick();
         }
-        else if (gameState == STATE.Menu)
+        else if (gameState == STATE.Menu || gameState == STATE.End)
         {
             menu.tick();
         }
@@ -152,7 +153,7 @@ public class Game extends Canvas implements Runnable
 
         BufferStrategy bs = this.getBufferStrategy();
 
-        if (bs ==null)
+        if (bs == null)
         {
             //we're going to have 3 buffers
             this.createBufferStrategy(3);
@@ -162,16 +163,14 @@ public class Game extends Canvas implements Runnable
         Graphics g = bs.getDrawGraphics();
         g.setColor(Color.black);
         g.fillRect(0, 0, WIDTH, HEIGHT);
-        //g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
 
         handler.render(g);
 
         if (gameState == STATE.Game)
         {
-            //g.drawImage(image, 0, 0, WIDTH, HEIGHT, this);
             hud.render(g);
         }
-        else if (gameState == STATE.Menu || gameState == STATE.Help)
+        else if (gameState == STATE.Menu || gameState == STATE.Help || gameState == STATE.End)
         {
             menu.render(g);
         }
