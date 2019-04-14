@@ -1,13 +1,11 @@
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 public class Player extends GameObject
 {
     private BufferedImage image;
-    private boolean UpPressed;
-    private boolean DownPressed;
-    private boolean RightPressed;
-    private boolean LeftPressed;
+
     private int angle;
 
     private int vx, vy = 0;
@@ -24,23 +22,22 @@ public class Player extends GameObject
     public void tick()
     {
 
-        /*
-        if (this.UpPressed) {
+        if (this.isUp()) {
             this.moveForwards();
         }
-        if (this.DownPressed) {
+        if (this.isDown()) {
             this.moveBackwards();
         }
 
-        if (this.LeftPressed) {
+        if (this.isLeft()) {
             this.rotateLeft();
         }
-        if (this.RightPressed) {
+        if (this.isRight()) {
             this.rotateRight();
         }
 
 
-         */
+
 
         x += getVelX();
         y += getVelY();
@@ -72,39 +69,6 @@ public class Player extends GameObject
     public Rectangle getBounds()
     {
         return null;
-    }
-
-    /*
-    void toggleUpPressed() {
-        this.UpPressed = true;
-    }
-
-    void toggleDownPressed() {
-        this.DownPressed = true;
-    }
-
-    void toggleRightPressed() {
-        this.RightPressed = true;
-    }
-
-    void toggleLeftPressed() {
-        this.LeftPressed = true;
-    }
-
-    void unToggleUpPressed() {
-        this.UpPressed = false;
-    }
-
-    void unToggleDownPressed() {
-        this.DownPressed = false;
-    }
-
-    void unToggleRightPressed() {
-        this.RightPressed = false;
-    }
-
-    void unToggleLeftPressed() {
-        this.LeftPressed = false;
     }
 
     private void rotateLeft() {
@@ -149,5 +113,11 @@ public class Player extends GameObject
         }
     }
 
-*/
+    void drawImage(Graphics g) {
+        AffineTransform rotation = AffineTransform.getTranslateInstance(x, y);
+        rotation.rotate(Math.toRadians(angle), this.image.getWidth() / 2.0, this.image.getHeight() / 2.0);
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.drawImage(this.image, rotation, null);
+    }
+
 }
