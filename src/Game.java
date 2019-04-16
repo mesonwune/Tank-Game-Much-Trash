@@ -1,9 +1,6 @@
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.Random;
 
 public class Game extends Canvas implements Runnable
@@ -17,13 +14,14 @@ public class Game extends Canvas implements Runnable
     private boolean running = false;
 
     //buffers the whole window
-    private BufferedImage image = null;
+    private BufferedImage image, tank1, tank2 = null;
 
     private Random r;
     private Handler handler;
     private HUD hud;
     private Menu menu;
 
+    /*
     public enum STATE
     {
         Menu,
@@ -34,35 +32,39 @@ public class Game extends Canvas implements Runnable
 
     public STATE gameState = STATE.Menu;
 
+*/
     public Game()
     {
         handler = new Handler();
-        menu = new Menu(this, handler);
+        //menu = new Menu(this, handler);
         this.addKeyListener(new KeyInput(handler));
-        this.addMouseListener(menu);
+        //this.addMouseListener(menu);
+
+        BufferedImageLoader loader = new BufferedImageLoader();
+
+        image = loader.loadImage("src/resources/images/tank_level.png");
+
+        System.out.println(image == null);
 
         /*System.out.println("Height: " + screenSize.getHeight());
         System.out.println("Width: " + screenSize.getWidth());
         System.out.println("size: " + screenSize.getSize());*/
         new Window(WIDTH, HEIGHT, "Tanker", this);
 
-        try
-        {
-            image = ImageIO.read(new File("/resources/Background.png"));
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+
 
         hud = new HUD();
 
         r = new Random();
 
+        /*
         if (gameState == STATE.Game)
         {
-            handler.addObject(new Player(WIDTH / 2 - 32, HEIGHT / 2 - 32, ID.Player));
-            handler.addObject(new Player(WIDTH / 2 + 64, HEIGHT / 2 - 32, ID.Player2));
+            this.loadLevel(image);
         }
+        */
+
+        loadLevel(image);
     }
 
     public synchronized void start()
@@ -136,6 +138,7 @@ public class Game extends Canvas implements Runnable
     private void tick()
     {
         handler.tick();
+        /*
         if (gameState == STATE.Game)
         {
             hud.tick();
@@ -144,6 +147,7 @@ public class Game extends Canvas implements Runnable
         {
             menu.tick();
         }
+        */
 
     }
 
@@ -161,11 +165,12 @@ public class Game extends Canvas implements Runnable
         }
 
         Graphics g = bs.getDrawGraphics();
-        g.setColor(Color.black);
+        g.setColor(Color.red);
         g.fillRect(0, 0, WIDTH, HEIGHT);
 
         handler.render(g);
 
+        /*
         if (gameState == STATE.Game)
         {
             hud.render(g);
@@ -174,10 +179,42 @@ public class Game extends Canvas implements Runnable
         {
             menu.render(g);
         }
+        */
 
 
         g.dispose();
         bs.show();
+    }
+
+    private void loadLevel(BufferedImage image)
+    {
+        int w = image.getWidth();
+        int h = image.getHeight();
+
+        for (int xx = 0; xx < w; xx++)
+        {
+            for (int yy = 0; yy < h; yy++)
+            {
+                int pixel = image.getRGB(xx, yy);
+                int red = (pixel >> 16) & 0xff;
+                int green = (pixel >> 8) & 0xff;
+                int blue = (pixel) & 0xff;
+
+
+                if (red == 255 && blue == 255 && green == 255)
+                {
+                    handler.addObject(new Player(xx*32, yy*32, ID.Player));
+                }
+                else if (blue == 255 && green == 0 && red == 0)
+                {
+                    handler.addObject(new Player(xx*32, yy*32, ID.Player2));
+                }
+                else if (red == 0 && blue == 0 && green == 0)
+                {
+                    handler.addObject(new Block (xx*32, yy*32, ID.Block));
+                }
+            }
+        }
     }
 
     //making sure that the player can't leave the game
